@@ -53,23 +53,20 @@ def run_streamlit():
     q = st.chat_input("Ask about modernization...")
     if q:
         st.session_state.messages.append({"role": "user", "content": q, "ts": datetime.utcnow().isoformat()})
-        docs = DB.list_documents()
-        resp = simple_rag_answer(q, docs)
-        st.session_state.messages.append({"role": "assistant", "content": resp["answer"], "ts": datetime.utcnow().isoformat()})
+        
+        # Show loading state while processing
+        with st.spinner('Processing your question...'):
+            docs = DB.list_documents()
+            resp = simple_rag_answer(q, docs)
+            st.session_state.messages.append({"role": "assistant", "content": resp["answer"], "ts": datetime.utcnow().isoformat()})
+        
         with st.chat_message("assistant"):
             st.write(resp["answer"])
         # persist conversation
         DB.insert_conversation({"timestamp": datetime.utcnow().isoformat(), "messages": st.session_state.messages})
+        st.rerun()
 
-    st.divider()
-    st.subheader("Feedback")
-    fb = st.text_area("Feedback")
-    if st.button("Submit Feedback"):
-        if fb.strip():
-            DB.insert_feedback({"feedback": fb, "timestamp": datetime.utcnow().isoformat()})
-            st.success("Thanks!")
-        else:
-            st.warning("Enter feedback first")
+
 
 
 def run_cli():

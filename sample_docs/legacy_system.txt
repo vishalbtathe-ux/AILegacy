@@ -1,0 +1,28 @@
+Legacy System Architecture Overview
+
+Our current legacy system is built on the following technologies:
+- Database: Oracle 11g running on-premises
+- Application Server: Apache Tomcat 7
+- Frontend: JSP pages with jQuery
+- Backend: Java EE with EJB 2.1
+- Authentication: LDAP integration
+
+Security Considerations:
+- All data is encrypted at rest using AES-256
+- SSL/TLS 1.2 for data in transit
+- Role-based access control (RBAC) implemented
+- Regular security audits conducted quarterly
+
+Modernization Goals:
+- Migrate to cloud infrastructure (AWS or Azure)
+- Containerize applications using Docker
+- Implement microservices architecture
+- Upgrade to modern Java frameworks (Spring Boot)
+- Replace JSP with React or Angular frontend
+- Move from Oracle to PostgreSQL or cloud-native database
+
+Current Challenges:
+- Monolithic architecture makes scaling difficult
+- Legacy code has limited documentation
+- High maintenance costs
+- Difficulty recruiting developers familiar with old tech stack

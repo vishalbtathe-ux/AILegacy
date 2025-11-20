@@ -43,15 +43,13 @@ def simple_rag_answer(query, docs=None):
     if not top:
         return {"answer": "I couldn't find relevant content in your documents. Consider uploading architecture docs, db schemas, or runbooks.", "sources": [], "confidence": 0.2}
 
-    # Build context from top docs
+    # Build context from top docs (reduced size for faster processing)
     context_snippets = []
     srcs = []
     for score, d in top:
         content = d.get("content", "")
-        # Take a larger chunk for context, e.g., first 1000 chars or around keywords
-        # For simplicity, we'll take the first 1000 characters of the doc if it's a match
-        # In a real system, we'd use vector search to find the best chunk.
-        snippet = content[:1000] + "..." if len(content) > 1000 else content
+        # Reduced chunk size from 1000 to 500 for faster processing
+        snippet = content[:500] + "..." if len(content) > 500 else content
         context_snippets.append(f"Document: {d.get('filename')}\nContent: {snippet}")
         srcs.append(d.get('filename'))
 
@@ -75,7 +73,9 @@ def simple_rag_answer(query, docs=None):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.3
+            temperature=0.3,
+            max_tokens=300,  # Limit response length for faster generation
+            stream=False
         )
         answer = response.choices[0].message.content
         confidence = 0.9 # High confidence if we got a response

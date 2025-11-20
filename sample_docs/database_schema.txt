@@ -1,0 +1,38 @@
+Database Schema Documentation
+
+Main Tables:
+1. USERS
+   - user_id (PRIMARY KEY)
+   - username
+   - email
+   - password_hash
+   - created_date
+   - last_login
+
+2. PRODUCTS
+   - product_id (PRIMARY KEY)
+   - product_name
+   - description
+   - price
+   - category_id (FOREIGN KEY)
+   - stock_quantity
+
+3. ORDERS
+   - order_id (PRIMARY KEY)
+   - user_id (FOREIGN KEY)
+   - order_date
+   - total_amount
+   - status
+
+4. ORDER_ITEMS
+   - order_item_id (PRIMARY KEY)
+   - order_id (FOREIGN KEY)
+   - product_id (FOREIGN KEY)
+   - quantity
+   - unit_price
+
+Migration Strategy:
+- Use AWS Database Migration Service (DMS) for initial data transfer
+- Implement dual-write pattern during transition period
+- Validate data integrity using checksums
+- Plan for minimal downtime during cutover
